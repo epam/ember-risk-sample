@@ -6,7 +6,7 @@ This archive contains IntelliJ/IDEA project and Gradle build files for MaxQuanti
 ### Build
 This project references Ember Java API libraries located in Deltix private maven repository.
 
-Please make sure that you define environment variables `NEXUS_USER` and `NEXUS_PASS` to Deltix repository credentials provided to you.
+> Please make sure that you define environment variables `NEXUS_USER` and `NEXUS_PASS` to Deltix repository credentials provided to you.
 
 Now you can build this sample using Gradle or IntelliJ/IDEA.
 
