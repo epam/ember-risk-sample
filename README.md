@@ -1,6 +1,6 @@
 ## Sample Risk Rule
 
-This project illustrates how to build, test, debug, and deploy custom Risk Rule for Deltix Execution Server.
+This project illustrates how to build, test, debug, and deploy custom Risk Rule for Deltix Execution Server (Ember).
 This archive contains IntelliJ/IDEA project and Gradle build files for MaxQuantity sample risk rule.
 
 ### Build
@@ -24,7 +24,7 @@ You can just setup breakpoints in your risk rule and launch debugger.
 
 See ES Quick Start document for more information.
 
-```
+```hocon
 risk {
   riskLimits: {
     MaxQuantity: deltix.ember.service.oms.risk.sample.SampleQuantityRiskRuleFactory
@@ -39,8 +39,8 @@ risk {
 
 Entire Gradle project uses java-library plugin.
 
-```
-gradlew build 
+```sh
+./gradlew build 
 ```
 
 The build produces `build/libs/risk-sample-*.jar`. To deploy your risk rule to actual server copy this JAR file under `lib/custom/` directory of your Ember installation.
