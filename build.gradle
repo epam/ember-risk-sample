@@ -1,0 +1,70 @@
+apply plugin: 'java-library'
+
+sourceCompatibility = 1.8
+
+apply from: "$rootDir/gradle/deltix.gradle"
+
+repositories {
+    mavenCentral()
+    deltixMavenRepository("epm-rtc-java")
+}
+
+ext {
+    emberVersion = '1.11.51'
+    quantServerCommonsVersion = '5.4.29'
+    timeBaseVersion = '5.5.36'
+}
+
+dependencies {
+
+    implementation "deltix:deltix-anvil-lang:$emberVersion"
+    implementation "deltix:deltix-ember-api:$emberVersion"
+    implementation "deltix:deltix-ember-message:$emberVersion"
+
+
+    // Decimal datatype
+    implementation 'com.epam.deltix:dfp:0.11.25'
+
+    // Logging
+    implementation 'deltix:deltix-gflog-api:2.1.12'
+
+    // Deltix Collections are used in some TimeBase messages
+    implementation "deltix.qsrv:deltix-commons-collections:$quantServerCommonsVersion"
+    implementation "deltix.qsrv:deltix-commons-util:$quantServerCommonsVersion"
+    implementation "deltix.qsrv:deltix-commons-lang:$quantServerCommonsVersion"
+    implementation "deltix.qsrv.timebase:deltix-timebase-api:$timeBaseVersion"
+
+    // @Nullable, etc.
+    compile group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
+
+    // Unit tests
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testRuntime 'org.mockito:mockito-core:2.6.3'
+
+    // We need this if we want to Run/Debug RR from this project using EmberApp service and for OrderSubmitSample
+    testCompile  "deltix:deltix-ember-app:$emberVersion"
+
+    // Order SubmitSample dependency
+    testRuntime "deltix:deltix-ember-message-bus-client:$emberVersion"
+    testRuntime "deltix:deltix-ember-message:$emberVersion"
+    testRuntime "deltix:deltix-ember-codec:$emberVersion"
+    testCompile "deltix.qsrv.timebase:deltix-timebase-api:$timeBaseVersion"
+    //testCompile "deltix:trading-calendar:5.2.1"
+
+}
+
+
+// ZIP with sample risk rules to share with clients (result file can be found under build/distributions/*.zip)
+task makeZIP(type: Zip) {
+    baseName = 'deltix-risk-sample'
+
+    from('.') {
+        include '**/*'
+        exclude '.git/'
+        exclude '.gradle/'
+        exclude '.idea/libraries/'
+        exclude '.idea/vcs.xml'
+        exclude 'build/'
+        exclude 'out/'
+    }
+}
