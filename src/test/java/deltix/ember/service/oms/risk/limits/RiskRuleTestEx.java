@@ -39,6 +39,11 @@ public abstract class RiskRuleTestEx<R extends RiskRule> extends RiskRuleTest<R>
         return isLive;
     }
 
+    @Override
+    public boolean isSatellite() {
+        return false;
+    }
+
     public R onLive(R rule) {
         isLive = true;
         rule.onLive(this);
@@ -96,14 +101,14 @@ public abstract class RiskRuleTestEx<R extends RiskRule> extends RiskRuleTest<R>
     }
 
     protected @Timestamp long setClock(@Timestamp long time) {
-        clock = () -> time;
+        clock = new ManualClock(time);
         return time;
     }
 
     /** @param datetime timestamp in yyyy-MM-dd HH:mm:ss.SSS zzz format */
     protected @Timestamp long setClock(String datetime) {
         @Timestamp long time = parseTimestamp (datetime);
-        clock = () -> time;
+        clock = new ManualClock(time);
         return time;
     }
 

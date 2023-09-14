@@ -1,6 +1,7 @@
 apply plugin: 'java-library'
 
-sourceCompatibility = 1.8
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
 
 apply from: "$rootDir/gradle/deltix.gradle"
 
@@ -10,9 +11,9 @@ repositories {
 }
 
 ext {
-    emberVersion = '1.11.51'
-    quantServerCommonsVersion = '5.4.29'
-    timeBaseVersion = '5.5.36'
+    emberVersion = '1.14.45'
+    quantServerCommonsVersion = '5.6.13'
+    timeBaseVersion = '5.6.23'
 }
 
 dependencies {
@@ -23,10 +24,10 @@ dependencies {
 
 
     // Decimal datatype
-    implementation 'com.epam.deltix:dfp:0.11.25'
+    implementation 'com.epam.deltix:dfp:1.0.1'
 
     // Logging
-    implementation 'deltix:deltix-gflog-api:2.1.12'
+    implementation 'com.epam.deltix:gflog-api:2.1.12'
 
     // Deltix Collections are used in some TimeBase messages
     implementation "deltix.qsrv:deltix-commons-collections:$quantServerCommonsVersion"
@@ -35,28 +36,28 @@ dependencies {
     implementation "deltix.qsrv.timebase:deltix-timebase-api:$timeBaseVersion"
 
     // @Nullable, etc.
-    compile group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
+    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
 
     // Unit tests
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    testRuntime 'org.mockito:mockito-core:2.6.3'
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    testImplementation 'org.mockito:mockito-core:2.6.3'
 
     // We need this if we want to Run/Debug RR from this project using EmberApp service and for OrderSubmitSample
-    testCompile  "deltix:deltix-ember-app:$emberVersion"
+    testImplementation  "deltix:deltix-ember-app:$emberVersion"
 
     // Order SubmitSample dependency
-    testRuntime "deltix:deltix-ember-message-bus-client:$emberVersion"
-    testRuntime "deltix:deltix-ember-message:$emberVersion"
-    testRuntime "deltix:deltix-ember-codec:$emberVersion"
-    testCompile "deltix.qsrv.timebase:deltix-timebase-api:$timeBaseVersion"
-    //testCompile "deltix:trading-calendar:5.2.1"
+    testImplementation "deltix:deltix-ember-message-bus-client:$emberVersion"
+    testImplementation "deltix:deltix-ember-message:$emberVersion"
+    testImplementation "deltix:deltix-ember-codec:$emberVersion"
+    testImplementation "deltix.qsrv.timebase:deltix-timebase-api:$timeBaseVersion"
+    //testImplementation "deltix:trading-calendar:5.2.1"
 
 }
 
 
 // ZIP with sample risk rules to share with clients (result file can be found under build/distributions/*.zip)
 task makeZIP(type: Zip) {
-    baseName = 'deltix-risk-sample'
+    archiveBaseName = 'deltix-risk-sample'
 
     from('.') {
         include '**/*'

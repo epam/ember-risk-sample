@@ -7,8 +7,8 @@ import deltix.ember.message.trade.OrderNewRequest;
 import deltix.ember.message.trade.OrderReplaceRequest;
 import deltix.ember.message.trade.Side;
 import deltix.ember.service.oms.risk.api.*;
-import deltix.gflog.Log;
-import deltix.gflog.LogFactory;
+import com.epam.deltix.gflog.api.Log;
+import com.epam.deltix.gflog.api.LogFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
