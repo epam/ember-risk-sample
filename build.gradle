@@ -6,8 +6,8 @@ targetCompatibility = JavaVersion.VERSION_11
 apply from: "$rootDir/gradle/deltix.gradle"
 
 repositories {
+    deltixMavenRepository("epm-rtc-public-java")
     mavenCentral()
-    deltixMavenRepository("epm-rtc-java")
 }
 
 ext {
