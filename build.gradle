@@ -1,7 +1,13 @@
-apply plugin: 'java-library'
+plugins {
+    // Supports functionality similar to Maven BOM.
+    // Helps to avoid re-declaring dependency version in each subproject.
+    // See https://github.com/spring-gradle-plugins/dependency-management-plugin
+    id "io.spring.dependency-management" version "1.1.5" apply false
+}
 
-sourceCompatibility = JavaVersion.VERSION_11
-targetCompatibility = JavaVersion.VERSION_11
+
+apply plugin: 'java-library'
+apply plugin: 'io.spring.dependency-management'
 
 apply from: "$rootDir/gradle/deltix.gradle"
 
@@ -10,48 +16,70 @@ repositories {
     mavenCentral()
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+
 ext {
-    emberVersion = '1.14.45'
-    quantServerCommonsVersion = '5.6.13'
-    timeBaseVersion = '5.6.23'
+    emberVersion = '1.14.154'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom 'deltix:deltix-ember-bom:' + emberVersion
+    }
 }
 
 dependencies {
-
-    implementation "deltix:deltix-anvil-lang:$emberVersion"
-    implementation "deltix:deltix-ember-api:$emberVersion"
-    implementation "deltix:deltix-ember-message:$emberVersion"
+    // Ember API
+    implementation "deltix:deltix-anvil-lang"
+    implementation "deltix:deltix-ember-api"
+    implementation "deltix:deltix-ember-message"
 
 
     // Decimal datatype
-    implementation 'com.epam.deltix:dfp:1.0.1'
+    implementation 'com.epam.deltix:dfp'
 
-    // Logging
-    implementation 'com.epam.deltix:gflog-api:2.1.12'
+    // Garbage free Logging
+    implementation 'com.epam.deltix:gflog-api'
 
     // Deltix Collections are used in some TimeBase messages
-    implementation "deltix.qsrv:deltix-commons-collections:$quantServerCommonsVersion"
-    implementation "deltix.qsrv:deltix-commons-util:$quantServerCommonsVersion"
-    implementation "deltix.qsrv:deltix-commons-lang:$quantServerCommonsVersion"
-    implementation "deltix.qsrv.timebase:deltix-timebase-api:$timeBaseVersion"
+    implementation "deltix.qsrv:deltix-commons-collections"
+    implementation "deltix.qsrv:deltix-commons-util"
+    implementation "deltix.qsrv:deltix-commons-lang"
+    implementation "deltix.qsrv.timebase:deltix-timebase-api"
 
     // @Nullable, etc.
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
 
     // Unit tests
-    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    testImplementation group: 'junit', name: 'junit', version: '4.13.1'
     testImplementation 'org.mockito:mockito-core:2.6.3'
+
+
+    // Order SubmitSample dependency
+    testImplementation "deltix:deltix-ember-message-bus-client"
+    testImplementation "deltix:deltix-ember-message"
+    testImplementation "deltix:deltix-ember-codec"
+    testImplementation "deltix.qsrv.timebase:deltix-timebase-api"
+    //testImplementation "deltix:trading-calendar:5.2.1"
 
     // We need this if we want to Run/Debug RR from this project using EmberApp service and for OrderSubmitSample
     testImplementation  "deltix:deltix-ember-app:$emberVersion"
 
-    // Order SubmitSample dependency
-    testImplementation "deltix:deltix-ember-message-bus-client:$emberVersion"
-    testImplementation "deltix:deltix-ember-message:$emberVersion"
-    testImplementation "deltix:deltix-ember-codec:$emberVersion"
-    testImplementation "deltix.qsrv.timebase:deltix-timebase-api:$timeBaseVersion"
-    //testImplementation "deltix:trading-calendar:5.2.1"
+}
 
+test {
+    // useJUnitPlatform() // if you're using JUnit 5
+
+    jvmArgs '--add-opens=java.base/sun.nio.ch=ALL-UNNAMED',
+            '--add-opens=java.base/sun.nio=ALL-UNNAMED',
+            '--add-opens=java.base/java.nio=ALL-UNNAMED',
+            '--add-opens=java.base/java.lang=ALL-UNNAMED',
+            '--add-opens=java.base/java.util.zip=ALL-UNNAMED',
+            '--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED'
 }
 
 

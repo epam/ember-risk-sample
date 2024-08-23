@@ -1,10 +1,16 @@
 package deltix.ember.service.oms.risk.sample;
 
+import deltix.ember.message.risk.ProjectionKey;
 import deltix.ember.message.smd.InstrumentType;
 import deltix.ember.message.trade.Side;
+import deltix.ember.service.InstrumentUpdateHandler;
+import deltix.ember.service.oms.risk.api.PositionView;
+import deltix.ember.service.oms.risk.api.RiskRule;
 import deltix.ember.service.oms.risk.limits.RiskRuleTestEx;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.function.BiConsumer;
 
 public class Test_SampleQuantityRiskRule extends RiskRuleTestEx<SampleQuantityRiskRule> {
 
@@ -28,6 +34,12 @@ public class Test_SampleQuantityRiskRule extends RiskRuleTestEx<SampleQuantityRi
 
 
     // helpers
+
+
+    @Override
+    public void addInstrumentUpdateListener(InstrumentUpdateHandler instrumentUpdateHandler) {
+        throw new UnsupportedOperationException();
+    }
 
     private SampleQuantityRiskRule newRiskRule(int maxQuantity) {
         rule = new SampleQuantityRiskRule();
