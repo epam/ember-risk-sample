@@ -1,17 +1,19 @@
 package deltix.ember.service.oms.risk.sample;
 
 import deltix.ember.service.oms.position.ProjectionPath;
-import deltix.ember.service.oms.risk.api.*;
+import deltix.ember.service.oms.risk.api.CustomRiskRuleFactory;
+import deltix.ember.service.oms.risk.api.RiskLimitDefinition;
+import deltix.ember.service.oms.risk.api.RiskManagerContext;
+import deltix.ember.service.oms.risk.api.RiskRule;
 
 import javax.annotation.Nonnull;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static deltix.ember.service.oms.risk.sample.SamplePnLRiskRule.MaxLoss;
-import static deltix.ember.service.oms.risk.sample.SampleQuantityRiskRule.MaxQuantity;
 import static deltix.ember.service.oms.risk.sample.SamplePositionRiskRule.MaxPosition;
+import static deltix.ember.service.oms.risk.sample.SampleQuantityRiskRule.MaxQuantity;
 
 /**
  * Sample implementation of RiskRulesFactory
@@ -21,6 +23,24 @@ import static deltix.ember.service.oms.risk.sample.SamplePositionRiskRule.MaxPos
 public class SampleQuantityRiskRuleFactory implements CustomRiskRuleFactory
 {
     private static final List<String> limitNames = Collections.unmodifiableList(Arrays.asList(MaxQuantity, MaxPosition, MaxLoss));
+
+
+    // Examples of parameters custom risk rule may take from config
+    // Note: these parameters are not limits - actual limits are defined via Ember Monitor or RiskUpdateRequest API
+    //
+    ///
+    //
+    //
+    private String marketClosingTime;
+    private String timeZone;
+
+    public void setMarketClosingTime(String marketClosingTime) {
+        this.marketClosingTime = marketClosingTime;
+    }
+
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
+    }
 
     /**
      * @return Supported limit names
@@ -40,6 +60,11 @@ public class SampleQuantityRiskRuleFactory implements CustomRiskRuleFactory
      */
     @Override
     public RiskRule create(String limitName, ProjectionPath path, RiskManagerContext context) {
+
+        // Here we can use initialization parameters if we need to
+        //Calendar timerCalendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
+        //long closingTimeOfDay = OrderAttributesParser.parseDuration(marketClosingTime);
+
         if (MaxQuantity.equals(limitName)) {
             return new SampleQuantityRiskRule();
         } else if (MaxPosition.equals(limitName)) {
