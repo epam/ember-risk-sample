@@ -26,10 +26,13 @@ public class SampleQuantityRiskRuleFactory implements CustomRiskRuleFactory
 
 
     // Examples of parameters custom risk rule may take from config
-    // Note: these parameters are not limits - actual limits are defined via Ember Monitor or RiskUpdateRequest API
+    // Note: these parameters are not limits - actual limits are defined via Ember Monitor or RiskUpdateRequest API.
     //
-    ///
-    //
+    // Assuming parameters are passed via ember.conf like this:
+    //     settings {
+    //       marketClosingTime = "17:00:00"
+    //       timeZone = "America/New_York"
+    //     }
     //
     private String marketClosingTime;
     private String timeZone;
